@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}
+CropSense — About
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+<h1 data-i18n="about_title">
+    About CropSense
+</h1>
+
+</div>
+
+<div class="about-grid">
+
+<div class="card">
+
+    <h2 data-i18n="what_is_cropsense">
+        🌾 What is CropSense?
+    </h2>
+
+    <p>
+        CropSense is an AI-powered crop recommendation
+        system built during a machine learning internship.
+        It uses a Random Forest Classifier trained on soil
+        nutrient and climate data to suggest the most
+        suitable crop for a given set of conditions.
+    </p>
+
+</div>
+
+
+
+<div class="card">
+
+    <h2 data-i18n="ml_model">
+        🧠 The ML Model
+    </h2>
+
+    <p>
+        The model is a
+        <strong>Random Forest Classifier</strong>
+        with 100 decision trees, trained on the Crop
+        Recommendation Dataset containing 2,200 samples
+        across 22 crop types. It achieves high accuracy
+        by combining multiple decision trees and voting
+        on the outcome.
+    </p>
+
+</div>
+
+
+
+<div class="card">
+
+    <h2 data-i18n="input_features">
+        📥 Input Features
+    </h2>
+
+    <ul class="about-list">
+
+        <li>
+            <strong>N</strong>
+            — Nitrogen content in soil (kg/ha)
+        </li>
+
+        <li>
+            <strong>P</strong>
+            — Phosphorus content in soil (kg/ha)
+        </li>
+
+        <li>
+            <strong>K</strong>
+            — Potassium content in soil (kg/ha)
+        </li>
+
+        <li>
+            <strong>Temperature</strong>
+            — Average temperature (°C)
+        </li>
+
+        <li>
+            <strong>Humidity</strong>
+            — Relative humidity (%)
+        </li>
+
+        <li>
+            <strong>pH</strong>
+            — Soil acidity/alkalinity
+        </li>
+
+        <li>
+            <strong>Rainfall</strong>
+            — Annual rainfall (mm)
+        </li>
+
+    </ul>
+
+</div>
+
+
+
+<div class="card">
+
+    <h2 data-i18n="supported_crops">
+        🌱 Supported Crops (22)
+    </h2>
+
+
+    <div class="crop-tags">
+
+        {% set crops = [
+            'Apple',
+            'Banana',
+            'Blackgram',
+            'Chickpea',
+            'Coconut',
+            'Coffee',
+            'Cotton',
+            'Grapes',
+            'Jute',
+            'Kidney Beans',
+            'Lentil',
+            'Maize',
+            'Mango',
+            'Moth Beans',
+            'Mung Bean',
+            'Muskmelon',
+            'Orange',
+            'Papaya',
+            'Pigeon Peas',
+            'Pomegranate',
+            'Rice',
+            'Watermelon'
+        ] %}
+
+
+        {% for c in crops %}
+
+            <span class="crop-tag">
+                {{ c }}
+            </span>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

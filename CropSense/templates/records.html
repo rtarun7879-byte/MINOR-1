@@ -1,0 +1,288 @@
+{% extends "base.html" %}
+
+{% block title %}
+CropSense — Records
+{% endblock %}
+
+{% block content %}
+
+<div class="records-hero">
+
+<h1 data-i18n="prediction_records">
+    📋 Prediction Records
+</h1>
+
+<p>
+    {{ crops|length }}
+    total prediction{% if crops|length != 1 %}s{% endif %}
+    stored in database
+</p>
+
+
+{% if crops %}
+
+<div class="records-hero-actions">
+
+    <a href="{{ url_for('predict') }}"
+       class="btn btn-primary"
+       data-i18n="new_prediction_btn">
+
+        + New Prediction
+
+    </a>
+
+
+    <form method="POST"
+          action="{{ url_for('clear_records') }}"
+          onsubmit="return confirm('Clear all records?')">
+
+        <button
+            type="submit"
+            class="btn btn-danger"
+            data-i18n="clear_all">
+
+            Clear All
+
+        </button>
+
+    </form>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% if crops %}
+
+<div class="download-card">
+
+<h2 data-i18n="download_records">
+    ⬇ DOWNLOAD RECORDS
+</h2>
+
+
+<div class="download-section">
+
+    <h3 data-i18n="all_records">
+        ALL RECORDS
+    </h3>
+
+
+    <a href="{{ url_for('download_all_csv') }}"
+       class="btn csv-btn"
+       data-i18n="download_all_csv">
+
+        Download All as CSV
+
+    </a>
+
+</div>
+
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Crop</th>
+
+<th>N</th>
+
+<th>P</th>
+
+<th>K</th>
+
+<th>Temp (°C)</th>
+
+<th>Humidity (%)</th>
+
+<th>pH</th>
+
+<th>Rainfall (mm)</th>
+
+<th>Confidence</th>
+
+<th>Date</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for c in crops %}
+
+<tr>
+
+<td>
+    {{ c['id'] }}
+</td>
+
+
+<td class="crop-cell">
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='images/' + c['crop_name'] + '.jpg'
+        ) }}"
+        alt="{{ c['crop_name'] }}"
+        class="crop-thumb"
+        onerror="
+            this.style.display='none';
+            this.nextElementSibling.style.display='inline';
+        ">
+
+
+    <span
+        class="crop-emoji-fallback"
+        style="display:none;">
+
+        {{ emojis.get(
+            c['crop_name'],
+            '🌱'
+        ) }}
+
+    </span>
+
+
+    {{ c['crop_name'].title() }}
+
+</td>
+
+
+<td>
+    {{ c['nitrogen'] }}
+</td>
+
+
+<td>
+    {{ c['phosphorus'] }}
+</td>
+
+
+<td>
+    {{ c['potassium'] }}
+</td>
+
+
+<td>
+    {{ c['temperature'] }}
+</td>
+
+
+<td>
+    {{ c['humidity'] }}
+</td>
+
+
+<td>
+    {{ c['ph'] }}
+</td>
+
+
+<td>
+    {{ c['rainfall'] }}
+</td>
+
+
+<td>
+
+    <span class="conf-pill
+        {% if c['confidence'] >= 95 %}
+            high
+        {% elif c['confidence'] >= 80 %}
+            mid
+        {% else %}
+            low
+        {% endif %}
+    ">
+
+        {{ c['confidence'] }}%
+
+    </span>
+
+</td>
+
+
+<td class="date-cell">
+
+    {{ c['created_at'][:10]
+       if c['created_at']
+       else '—' }}
+
+</td>
+
+
+<td>
+
+    <form
+        method="POST"
+        action="{{ url_for(
+            'delete_record',
+            id=c['id']
+        ) }}"
+        onsubmit="return confirm('Delete this record?')">
+
+        <button
+            type="submit"
+            class="btn-icon"
+            title="Delete">
+
+            ✕
+
+        </button>
+
+    </form>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+{% else %}
+
+<div class="empty-state">
+
+<span class="empty-icon">
+    🌱
+</span>
+
+<h3>
+    No predictions yet
+</h3>
+
+<p>
+    Run your first prediction
+    to see results here.
+</p>
+
+<a
+    href="{{ url_for('predict') }}"
+    class="btn btn-primary">
+
+    Make a Prediction
+
+</a>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

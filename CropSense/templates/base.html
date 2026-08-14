@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>
+    {% block title %}
+    CropSense — AI Crop Advisor
+    {% endblock %}
+</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+
+    /* ===============================
+       LANGUAGE SELECTOR
+       =============================== */
+
+    .language-selector {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+    }
+
+    .language-selector select {
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid #d0d8d2;
+        background: #ffffff;
+        color: #234b2b;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        transition: 0.2s ease;
+    }
+
+    .language-selector select:hover {
+        border-color: #2e7d32;
+    }
+
+    .language-selector select:focus {
+        border-color: #2e7d32;
+        box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.12);
+    }
+
+    /* ===============================
+       MOBILE LANGUAGE SELECTOR
+       =============================== */
+
+    @media (max-width: 768px) {
+
+        .language-selector {
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .language-selector select {
+            width: 100%;
+        }
+
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ==========================================
+     NAVIGATION BAR
+     ========================================== -->
+
+<nav class="navbar">
+
+<!-- BRAND -->
+
+<div class="nav-brand">
+    🌾 CropSense
+</div>
+
+
+<!-- NAVIGATION LINKS -->
+
+<div class="nav-links">
+
+    <!-- HOME -->
+
+    <a href="{{ url_for('home') }}"
+       class="nav-link {% if request.endpoint == 'home' %}active{% endif %}"
+       data-i18n="home">
+
+        Home
+
+    </a>
+
+
+    <!-- PREDICT -->
+
+    <a href="{{ url_for('predict') }}"
+       class="nav-link {% if request.endpoint == 'predict' %}active{% endif %}"
+       data-i18n="predict">
+
+        Predict
+
+    </a>
+
+
+    <!-- RECORDS -->
+
+    <a href="{{ url_for('records') }}"
+       class="nav-link {% if request.endpoint == 'records' %}active{% endif %}"
+       data-i18n="records">
+
+        Records
+
+    </a>
+
+
+    <!-- ABOUT -->
+
+    <a href="{{ url_for('about') }}"
+       class="nav-link {% if request.endpoint == 'about' %}active{% endif %}"
+       data-i18n="about">
+
+        About
+
+    </a>
+
+
+    <!-- FEEDBACK -->
+
+    {% if session.get('user') %}
+
+    <a href="{{ url_for('feedback') }}"
+       class="nav-link {% if request.endpoint == 'feedback' %}active{% endif %}"
+       data-i18n="feedback">
+
+        Feedback
+
+    </a>
+
+    {% endif %}
+
+
+    <!-- ==================================
+         LANGUAGE SELECTOR
+         ================================== -->
+
+    <div class="language-selector">
+
+        <select id="languageSelector"
+                onchange="changeLanguage(this.value)"
+                aria-label="Select Language">
+
+            <option value="en">
+                English
+            </option>
+
+            <option value="hi">
+                हिन्दी
+            </option>
+
+            <option value="ta">
+                தமிழ்
+            </option>
+
+            <option value="te">
+                తెలుగు
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- ==================================
+         USER / LOGOUT
+         ================================== -->
+
+    {% if session.get('user') %}
+
+    <a href="{{ url_for('logout') }}"
+       class="nav-link nav-logout">
+
+        🚪
+        <span data-i18n="logout">
+            Logout
+        </span>
+
+        ({{ session['user'] }})
+
+    </a>
+
+    {% endif %}
+
+</div>
+
+
+<!-- ======================================
+     MOBILE MENU BUTTON
+     ====================================== -->
+
+<button class="nav-toggle"
+        onclick="document.querySelector('.nav-links').classList.toggle('open')"
+        aria-label="Toggle navigation">
+
+    ☰
+
+</button>
+
+</nav>
+
+<!-- ==========================================
+     MAIN CONTENT
+     ========================================== -->
+
+<main class="main-content">
+
+{% block content %}
+
+{% endblock %}
+
+</main>
+
+<!-- ==========================================
+     FOOTER
+     ========================================== -->
+
+<footer class="footer">
+
+<p>
+
+    CropSense &copy; 2026
+
+    &nbsp;·&nbsp;
+
+    Powered by Random Forest ML
+
+    &nbsp;·&nbsp;
+
+    Built with Flask
+
+</p>
+
+</footer>
+
+<!-- ==========================================
+     LOCAL LANGUAGE TRANSLATION
+     ========================================== -->
+
+<script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
+
+</body>
+
+</html>

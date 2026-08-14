@@ -1,0 +1,244 @@
+{% extends "base.html" %}
+
+{% block title %}
+CropSense — Home
+{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================
+     HERO SECTION
+     ========================================== -->
+
+<section class="hero">
+
+
+    <div class="hero-inner">
+
+    <!-- Badge -->
+
+    <span class="hero-badge">
+        🤖 ML-Powered Recommendations
+    </span>
+
+
+    <!-- Main Heading -->
+
+    <h1 data-i18n="welcome">
+        Smart Crop<br>
+        Recommendations
+    </h1>
+
+
+    <!-- Description -->
+
+    <p class="hero-sub"
+       data-i18n="hero_text">
+
+        Enter your soil and climate data to get
+        AI-driven crop suggestions with confidence
+        scores — in seconds.
+
+    </p>
+
+
+    <!-- Buttons -->
+
+    <div class="hero-actions">
+
+        <a href="{{ url_for('predict') }}"
+           class="btn btn-primary"
+           data-i18n="get_recommendation">
+
+            Get Recommendation →
+
+        </a>
+
+
+        <a href="{{ url_for('records') }}"
+           class="btn btn-outline"
+           data-i18n="view_records">
+
+            View Records
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================
+     PREDICTION STATISTICS
+     ====================================== -->
+
+<div class="hero-stat">
+
+    <div class="stat-ring">
+
+        <span class="stat-number">
+            {{ total }}
+        </span>
+
+        <span class="stat-label"
+              data-i18n="predictions_made">
+
+            Predictions Made
+
+        </span>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- ==========================================
+     FEATURES SECTION
+     ========================================== -->
+
+<section class="features">
+
+<!-- SOIL ANALYSIS -->
+
+<div class="feature-card">
+
+    <span class="feat-icon">
+        🧪
+    </span>
+
+
+    <h3 data-i18n="soil_analysis">
+        Soil Analysis
+    </h3>
+
+
+    <p>
+        Input nitrogen, phosphorus,
+        potassium, and pH values to
+        tailor recommendations to
+        your exact soil composition.
+    </p>
+
+</div>
+
+
+
+<!-- CLIMATE MATCHING -->
+
+<div class="feature-card">
+
+    <span class="feat-icon">
+        🌡️
+    </span>
+
+
+    <h3 data-i18n="climate_matching">
+        Climate Matching
+    </h3>
+
+
+    <p>
+        Temperature, humidity, and
+        rainfall data are factored
+        into every prediction for
+        region-accurate results.
+    </p>
+
+</div>
+
+
+
+<!-- CONFIDENCE SCORES -->
+
+<div class="feature-card">
+
+    <span class="feat-icon">
+        📊
+    </span>
+
+
+    <h3 data-i18n="confidence_scores">
+        Confidence Scores
+    </h3>
+
+
+    <p>
+        Every prediction comes with
+        a confidence percentage so
+        you know exactly how certain
+        the model is.
+    </p>
+
+</div>
+
+</section>
+
+<!-- ==========================================
+     RECENT PREDICTIONS
+     ========================================== -->
+
+{% if latest %}
+
+<section class="recent-section">
+
+<h2>
+    Recent Predictions
+</h2>
+
+
+<div class="recent-grid">
+
+
+    {% for r in latest %}
+
+
+    <div class="recent-card">
+
+
+        <!-- Crop Emoji -->
+
+        <span class="recent-emoji">
+
+            {{ emojis.get(
+                r['crop_name'],
+                '🌱'
+            ) }}
+
+        </span>
+
+
+        <!-- Prediction Information -->
+
+        <div class="recent-info">
+
+
+            <strong>
+
+                {{ r['crop_name'].title() }}
+
+            </strong>
+
+
+            <span class="confidence-badge">
+
+                {{ r['confidence'] }}% confidence
+
+            </span>
+
+
+        </div>
+
+    </div>
+
+
+    {% endfor %}
+
+
+</div>
+
+</section>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,372 @@
+{% extends "base.html" %}
+
+{% block title %}
+CropSense — Result
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+
+<h1 data-i18n="prediction_result">
+    Prediction Result
+</h1>
+
+</div>
+
+<div class="result-wrapper">
+
+<!-- ======================================
+     RESULT HERO
+     ====================================== -->
+
+<div class="result-hero">
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='images/' + record['crop_name'] + '.jpg'
+        ) }}"
+        alt="{{ record['crop_name'] }}"
+        class="result-crop-img"
+        onerror="
+            this.style.display='none';
+            document.getElementById('fallback-emoji').style.display='block';
+        ">
+
+
+    <div
+        id="fallback-emoji"
+        class="result-emoji"
+        style="display:none;">
+
+        {{ emoji }}
+
+    </div>
+
+
+    <div class="result-crop">
+
+        {{ record['crop_name'].title() }}
+
+    </div>
+
+
+    <div
+        class="result-label"
+        data-i18n="recommended_crop">
+
+        Recommended Crop
+
+    </div>
+
+</div>
+
+
+
+<!-- ======================================
+     CONFIDENCE
+     ====================================== -->
+
+<div class="confidence-section">
+
+    <div
+        class="conf-label"
+        data-i18n="confidence_score">
+
+        Confidence Score
+
+    </div>
+
+
+    <div class="conf-bar-wrap">
+
+        <div
+            class="conf-bar"
+            style="--conf: {{ record['confidence'] }}%">
+        </div>
+
+    </div>
+
+
+    <div class="conf-value">
+
+        {{ record['confidence'] }}%
+
+    </div>
+
+</div>
+
+
+
+<!-- ======================================
+     INPUT SUMMARY
+     ====================================== -->
+
+<div class="summary-grid">
+
+    <div
+        class="summary-title"
+        data-i18n="input_summary">
+
+        Input Summary
+
+    </div>
+
+
+    <div class="summary-row">
+
+        <span class="srow-label">
+            🧪 Nitrogen (N)
+        </span>
+
+        <span class="srow-value">
+            {{ record['nitrogen'] }} kg/ha
+        </span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+        <span class="srow-label">
+            🧪 Phosphorus (P)
+        </span>
+
+        <span class="srow-value">
+            {{ record['phosphorus'] }} kg/ha
+        </span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+        <span class="srow-label">
+            🧪 Potassium (K)
+        </span>
+
+        <span class="srow-value">
+            {{ record['potassium'] }} kg/ha
+        </span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+        <span class="srow-label">
+            🌡️ Temperature
+        </span>
+
+        <span class="srow-value">
+            {{ record['temperature'] }} °C
+        </span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+        <span class="srow-label">
+            💧 Humidity
+        </span>
+
+        <span class="srow-value">
+            {{ record['humidity'] }} %
+        </span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+        <span class="srow-label">
+            ⚗️ pH Level
+        </span>
+
+        <span class="srow-value">
+            {{ record['ph'] }}
+        </span>
+
+    </div>
+
+
+    <div class="summary-row">
+
+        <span class="srow-label">
+            🌧️ Rainfall
+        </span>
+
+        <span class="srow-value">
+            {{ record['rainfall'] }} mm
+        </span>
+
+    </div>
+
+
+    <div class="summary-row summary-row-result">
+
+        <span class="srow-label">
+            🌱 Prediction
+        </span>
+
+        <span class="srow-value highlight">
+
+            {{ record['crop_name'].title() }}
+
+        </span>
+
+    </div>
+
+</div>
+
+
+
+<!-- ======================================
+     ACTIONS
+     ====================================== -->
+
+<div class="result-actions">
+
+
+    <a
+        href="{{ url_for('predict') }}"
+        class="btn btn-primary"
+        data-i18n="new_prediction">
+
+        New Prediction
+
+    </a>
+
+
+    <a
+        href="{{ url_for('records') }}"
+        class="btn btn-outline">
+
+        View Records
+
+    </a>
+
+
+    <button
+        onclick="toggleDownloadMenu()"
+        class="btn btn-primary"
+        data-i18n="download_report">
+
+        Download Report
+
+    </button>
+
+</div>
+
+
+
+<!-- ======================================
+     DOWNLOAD MENU
+     ====================================== -->
+
+<div
+    id="downloadMenu"
+    class="download-menu"
+    style="display:none;">
+
+
+    <a
+        href="{{ url_for(
+            'download_pdf',
+            id=record.id
+        ) }}"
+        class="btn pdf-btn"
+        data-i18n="download_pdf">
+
+        Download PDF
+
+    </a>
+
+
+    <a
+        href="{{ url_for(
+            'download_png',
+            id=record.id
+        ) }}"
+        class="btn png-btn"
+        data-i18n="download_png">
+
+        Download PNG
+
+    </a>
+
+
+    <a
+        href="{{ url_for(
+            'download_csv',
+            id=record.id
+        ) }}"
+        class="btn csv-btn"
+        data-i18n="download_csv">
+
+        Download CSV
+
+    </a>
+
+</div>
+
+</div>
+
+<script>
+
+function toggleDownloadMenu() {
+
+    let menu =
+        document.getElementById(
+            "downloadMenu"
+        );
+
+
+    menu.style.display =
+        menu.style.display === "none"
+        ? "block"
+        : "none";
+
+}
+
+
+window.addEventListener(
+    'load',
+    () => {
+
+        const bar =
+            document.querySelector(
+                '.conf-bar'
+            );
+
+
+        if (bar) {
+
+            const confValue =
+                '{{ record["confidence"] }}';
+
+
+            bar.style.width =
+                '0%';
+
+
+            setTimeout(
+                () => {
+
+                    bar.style.width =
+                        confValue + '%';
+
+                },
+                200
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}
